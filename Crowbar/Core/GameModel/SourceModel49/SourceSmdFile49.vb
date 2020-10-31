@@ -304,6 +304,7 @@ Public Class SourceSmdFile49
 					For faceSectionIndex As Integer = 0 To collisionData.theFaceSections.Count - 1
 						faceSection = collisionData.theFaceSections(faceSectionIndex)
 
+						' It seems like the last section with bone index out of range is the shrink-wrapped mesh of entire model.
 						If faceSection.theBoneIndex >= Me.theMdlFileData.theBones.Count Then
 							Continue For
 						End If
