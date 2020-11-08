@@ -3063,6 +3063,10 @@ Public Class SourceMdlFile49
 				Me.theInputFileReader.BaseStream.Seek(inputFileStreamPosition, SeekOrigin.Begin)
 			Next
 
+			'TODO: Remove any spaces from each aFlexDesc.theName because no spaces can be used in a flex name on the left side of a flex rule (i.e. before the =), 
+			'      e.g. (without quotes) "%mouthopen" not "%mouth open".
+			'      Verified that double-quotes are not allowed for the left side of a flex rule.
+
 			fileOffsetEnd = Me.theInputFileReader.BaseStream.Position - 1
 			Me.theMdlFileData.theFileSeekLog.Add(fileOffsetStart, fileOffsetEnd, "theMdlFileData.theFlexDescs " + Me.theMdlFileData.theFlexDescs.Count.ToString())
 		End If
