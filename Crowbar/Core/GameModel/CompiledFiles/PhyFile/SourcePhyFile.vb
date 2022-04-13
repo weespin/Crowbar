@@ -635,7 +635,11 @@ Public Class SourcePhyFile
 			Me.thePhyFileData.theSourcePhyEditParamsSection = New SourcePhyEditParamsSection()
 			Do
 				tempStreamOffset = Me.theInputFileReader.BaseStream.Position
+
 				line = FileManager.ReadTextLine(Me.theInputFileReader)
+				While (line <> Nothing And line <> "editparams {")
+					line = FileManager.ReadTextLine(Me.theInputFileReader)
+				End While
 				If line Is Nothing OrElse line <> "editparams {" Then
 					Me.theInputFileReader.BaseStream.Seek(tempStreamOffset, SeekOrigin.Begin)
 					Exit Do

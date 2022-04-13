@@ -2194,6 +2194,7 @@ Public Class SourceMdlFile37
 
 					anIkRule.index = Me.theInputFileReader.ReadInt32()
 					anIkRule.type = Me.theInputFileReader.ReadInt32()
+
 					anIkRule.chain = Me.theInputFileReader.ReadInt32()
 					anIkRule.bone = Me.theInputFileReader.ReadInt32()
 
