@@ -309,29 +309,34 @@ Public Class Compiler
 
 	Private Sub CompileModelsInFolderRecursively(ByVal modelsPathName As String)
 		Me.CompileModelsInFolder(modelsPathName)
+		Dim Directories() As String = Directory.GetDirectories(modelsPathName)
+		System.Threading.Tasks.Parallel.ForEach(Directories, Sub(aPathName)
+																 Me.CompileModelsInFolderRecursively(aPathName)
 
-		For Each aPathName As String In Directory.GetDirectories(modelsPathName)
-			Me.CompileModelsInFolderRecursively(aPathName)
-			If Me.CancellationPending Then
-				Return
-			End If
-		Next
+															 End Sub)
+
+
 	End Sub
 
 	Private Sub CompileModelsInFolder(ByVal modelsPathName As String)
-		For Each aPathFileName As String In Directory.GetFiles(modelsPathName, "*.qc")
-			Me.CompileOneModel(aPathFileName)
 
-			'TODO: Double-check if this is wanted. If so, then add equivalent to Decompiler.DecompileModelsInFolder().
-			Me.ReportProgress(5, "")
+		Dim Directories() As String = Directory.GetFiles(modelsPathName, "*.qc")
+		System.Threading.Tasks.Parallel.ForEach(Directories, Sub(aPathFileName)
+																 Me.CompileOneModel(aPathFileName)
 
-			If Me.CancellationPending Then
-				Return
-			ElseIf Me.theSkipCurrentModelIsActive Then
-				Me.theSkipCurrentModelIsActive = False
-				Continue For
-			End If
-		Next
+																 'TODO: Double-check if this is wanted. If so, then add equivalent to Decompiler.DecompileModelsInFolder().
+																 ' Me.ReportProgress(5, "")
+															 End Sub)
+		'For Each aPathFileName As String In Directory.GetFiles(modelsPathName, "*.qc")
+		'
+		'
+		'	'If Me.CancellationPending Then
+		'	'	Return
+		'	'ElseIf Me.theSkipCurrentModelIsActive Then
+		'	'	Me.theSkipCurrentModelIsActive = False
+		'	'	Continue For
+		'	'End If
+		'Next
 	End Sub
 
 	'SET Left4Dead2PathRootFolder=C:\Program Files (x86)\Steam\SteamApps\common\left 4 dead 2\
@@ -448,44 +453,44 @@ Public Class Compiler
 				Me.UpdateProgress(2, "Output from compiler """ + Me.GetGameCompilerPathFileName() + """: ")
 				Me.RunStudioMdlApp(qcPath, qcFileName)
 
-				If Not Me.theProcessHasOutputData Then
-					Me.UpdateProgress(2, "ERROR: The compiler did not return any status messages.")
-					Me.UpdateProgress(2, "CAUSE: The compiler is not the correct one for the selected game.")
-					Me.UpdateProgress(2, "SOLUTION: Verify integrity of game files via Steam so that the correct compiler is installed.")
-				ElseIf gameSetup.GameEngine = GameEngine.Source AndAlso TheApp.Settings.CompileOptionDefineBonesIsChecked Then
-					If Me.theDefineBonesFileStream IsNot Nothing Then
-						Dim qciPathFileName As String = CType(Me.theDefineBonesFileStream.BaseStream, FileStream).Name
-
-						Me.CloseDefineBonesFile()
-
-						'NOTE: Must do this after closing define bones file.
-						If File.Exists(qciPathFileName) Then
-							Dim qciFileInfo As New FileInfo(qciPathFileName)
-							If qciFileInfo.Length = 0 Then
-								Me.UpdateProgress(2, "CROWBAR WARNING: No define bones were written to QCI file.")
-
-								Try
-									File.Delete(qciPathFileName)
-								Catch ex As Exception
-									Me.UpdateProgress(2, "CROWBAR WARNING: Failed to delete empty QCI file: """ + qciPathFileName + """")
-								End Try
-							Else
-								Me.UpdateProgress(2, "CROWBAR: Wrote define bones into QCI file: """ + qciPathFileName + """")
-
-								If TheApp.Settings.CompileOptionDefineBonesModifyQcFileIsChecked Then
-									Dim line As String = Me.InsertAnIncludeDefineBonesFileCommandIntoQcFile(qciPathFileName)
-									Me.UpdateProgress(2, "CROWBAR: Wrote in the QC file this line: " + line)
-								End If
-							End If
-						Else
-							Me.UpdateProgress(2, "CROWBAR WARNING: Failed to write QCI file: """ + qciPathFileName + """")
-						End If
-					End If
-				Else
-					If File.Exists(compiledMdlPathFileName) Then
+				'If Not Me.theProcessHasOutputData Then
+				'	Me.UpdateProgress(2, "ERROR: The compiler did not return any status messages.")
+				'	Me.UpdateProgress(2, "CAUSE: The compiler is not the correct one for the selected game.")
+				'	Me.UpdateProgress(2, "SOLUTION: Verify integrity of game files via Steam so that the correct compiler is installed.")
+				'ElseIf gameSetup.GameEngine = GameEngine.Source AndAlso TheApp.Settings.CompileOptionDefineBonesIsChecked Then
+				'	If Me.theDefineBonesFileStream IsNot Nothing Then
+				'		Dim qciPathFileName As String = CType(Me.theDefineBonesFileStream.BaseStream, FileStream).Name
+				'
+				'		Me.CloseDefineBonesFile()
+				'
+				'		'NOTE: Must do this after closing define bones file.
+				'		If File.Exists(qciPathFileName) Then
+				'			Dim qciFileInfo As New FileInfo(qciPathFileName)
+				'			If qciFileInfo.Length = 0 Then
+				'				Me.UpdateProgress(2, "CROWBAR WARNING: No define bones were written to QCI file.")
+				'
+				'				Try
+				'					File.Delete(qciPathFileName)
+				'				Catch ex As Exception
+				'					Me.UpdateProgress(2, "CROWBAR WARNING: Failed to delete empty QCI file: """ + qciPathFileName + """")
+				'				End Try
+				'			Else
+				'				Me.UpdateProgress(2, "CROWBAR: Wrote define bones into QCI file: """ + qciPathFileName + """")
+				'
+				'				If TheApp.Settings.CompileOptionDefineBonesModifyQcFileIsChecked Then
+				'					Dim line As String = Me.InsertAnIncludeDefineBonesFileCommandIntoQcFile(qciPathFileName)
+				'					Me.UpdateProgress(2, "CROWBAR: Wrote in the QC file this line: " + line)
+				'				End If
+				'			End If
+				'		Else
+				'			Me.UpdateProgress(2, "CROWBAR WARNING: Failed to write QCI file: """ + qciPathFileName + """")
+				'		End If
+				'	End If
+				'Else
+				If File.Exists(compiledMdlPathFileName) Then
 						Me.ProcessCompiledModel(compiledMdlPathFileName, qcModelName)
 					End If
-				End If
+				'End If
 
 				' Clean up any created folders.
 				'If qcModelTopFolderPath <> "" Then
@@ -559,6 +564,7 @@ Public Class Compiler
 		myProcessStartInfo.RedirectStandardError = True
 		myProcessStartInfo.RedirectStandardInput = True
 		myProcessStartInfo.CreateNoWindow = True
+		myProcessStartInfo.WorkingDirectory = qcPath
 		myProcess.StartInfo = myProcessStartInfo
 		''NOTE: Need this line to make Me.myProcess_Exited be called.
 		'myProcess.EnableRaisingEvents = True

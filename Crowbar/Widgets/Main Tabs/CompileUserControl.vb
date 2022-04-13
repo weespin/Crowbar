@@ -592,37 +592,37 @@ Public Class CompileUserControl
 	End Sub
 
 	Private Sub UpdateWidgets(ByVal compilerIsRunning As Boolean)
-		TheApp.Settings.CompilerIsRunning = compilerIsRunning
-
-		Me.CompileComboBox.Enabled = Not compilerIsRunning
-		Me.QcPathFileNameTextBox.Enabled = Not compilerIsRunning
-		Me.BrowseForQcPathFolderOrFileNameButton.Enabled = Not compilerIsRunning
-
-		'Me.OutputSubfolderNameRadioButton.Enabled = Not compilerIsRunning
-		'Me.OutputSubfolderNameTextBox.Enabled = Not compilerIsRunning
-		'Me.UseDefaultOutputSubfolderNameButton.Enabled = Not compilerIsRunning
-		'Me.OutputFullPathRadioButton.Enabled = Not compilerIsRunning
-		'Me.OutputFullPathTextBox.Enabled = Not compilerIsRunning
-		'Me.BrowseForOutputPathNameButton.Enabled = Not compilerIsRunning
-		Me.OutputPathComboBox.Enabled = Not compilerIsRunning
-		Me.OutputPathTextBox.Enabled = Not compilerIsRunning
-		Me.OutputSubfolderTextBox.Enabled = Not compilerIsRunning
-		Me.BrowseForOutputPathButton.Enabled = Not compilerIsRunning
-		Me.GotoOutputPathButton.Enabled = Not compilerIsRunning
-		Me.UseDefaultOutputSubfolderButton.Enabled = Not compilerIsRunning
-
-		Me.OptionsGroupBox.Enabled = Not compilerIsRunning
-
-		Me.CompileButton.Enabled = Not compilerIsRunning
-		Me.SkipCurrentModelButton.Enabled = compilerIsRunning
-		Me.CancelCompileButton.Enabled = compilerIsRunning
-		Me.UseAllInPackButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
-
-		Me.CompiledFilesComboBox.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
-		Me.UseInViewButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0 AndAlso (Path.GetExtension(Me.theCompiledRelativePathFileNames(Me.CompiledFilesComboBox.SelectedIndex)) = ".mdl")
-		Me.RecompileButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
-		Me.UseInPackButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
-		Me.GotoCompiledMdlButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
+		'TheApp.Settings.CompilerIsRunning = compilerIsRunning
+		'
+		'Me.CompileComboBox.Enabled = Not compilerIsRunning
+		'Me.QcPathFileNameTextBox.Enabled = Not compilerIsRunning
+		'Me.BrowseForQcPathFolderOrFileNameButton.Enabled = Not compilerIsRunning
+		'
+		''Me.OutputSubfolderNameRadioButton.Enabled = Not compilerIsRunning
+		''Me.OutputSubfolderNameTextBox.Enabled = Not compilerIsRunning
+		''Me.UseDefaultOutputSubfolderNameButton.Enabled = Not compilerIsRunning
+		''Me.OutputFullPathRadioButton.Enabled = Not compilerIsRunning
+		''Me.OutputFullPathTextBox.Enabled = Not compilerIsRunning
+		''Me.BrowseForOutputPathNameButton.Enabled = Not compilerIsRunning
+		'Me.OutputPathComboBox.Enabled = Not compilerIsRunning
+		'Me.OutputPathTextBox.Enabled = Not compilerIsRunning
+		'Me.OutputSubfolderTextBox.Enabled = Not compilerIsRunning
+		'Me.BrowseForOutputPathButton.Enabled = Not compilerIsRunning
+		'Me.GotoOutputPathButton.Enabled = Not compilerIsRunning
+		'Me.UseDefaultOutputSubfolderButton.Enabled = Not compilerIsRunning
+		'
+		'Me.OptionsGroupBox.Enabled = Not compilerIsRunning
+		'
+		'Me.CompileButton.Enabled = Not compilerIsRunning
+		'Me.SkipCurrentModelButton.Enabled = compilerIsRunning
+		'Me.CancelCompileButton.Enabled = compilerIsRunning
+		'Me.UseAllInPackButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
+		'
+		'Me.CompiledFilesComboBox.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
+		'Me.UseInViewButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0 AndAlso (Path.GetExtension(Me.theCompiledRelativePathFileNames(Me.CompiledFilesComboBox.SelectedIndex)) = ".mdl")
+		'Me.RecompileButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
+		'Me.UseInPackButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
+		'Me.GotoCompiledMdlButton.Enabled = Not compilerIsRunning AndAlso Me.theCompiledRelativePathFileNames.Count > 0
 	End Sub
 
 	Private Sub UpdateCompiledRelativePathFileNames(ByVal iCompiledRelativePathFileNames As BindingListEx(Of String))
@@ -808,6 +808,10 @@ Public Class CompileUserControl
 	Private theModelRelativePathFileName As String
 
 	Private theCompiledRelativePathFileNames As BindingListEx(Of String)
+
+	Private Sub GameSetupComboBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles GameSetupComboBox.SelectedIndexChanged
+
+	End Sub
 
 #End Region
 
